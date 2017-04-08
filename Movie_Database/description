@@ -1,0 +1,24 @@
+ID: 201351006,201351010,201352004
+NAME: YASH CHOUBEY, ADITYA PRAKASH, SHUBHAM SHARMA
+Scope:	To help the students in finding information regarding the Movies and TV Series they want to watch as well search for the movies
+        they would like to watch.As these are great source for knowing the world around us,and we can know about other cultures and better 
+        understand how peoples live ,collaborate and work together.To store the relative information of all the movies and its attributes 
+        present at IIITV at that instance. To help the building up of a resource center.
+
+Data 
+requirements:	movie title,year,rating,cast,awards,actor name,dob,sex,songs,country,song title,composer,writer,singer etc.
+		This comprises of all the basic information anyone would like to know. Anyone having the curiosity to search 
+                for a given info would be provided all the relevant details regarding his/her search.
+
+Questions:	1.What are some new movies that came this year or the movies released which were in 2002?
+		2.Which movies are having rating above than 8.5/10 and are in English or Spanish language?
+		3.Enlist some horror/comedy/action movies which released after 2007 ordered lexicographically?
+		4.I like an actor A from movie M. what are some other movies of M?
+		5.Movie M won Award A in year Y. Which movie won award A in year (Y-1)?Who were the lead cast in the this movie?
+		6.I like a song S composed by artist A. what are some other songs composed by artist A after song S was composed 
+                  and in which movie were they introduced?
+		7.I like movies from genre G. What are the best movies in genre G?
+		8.I like the combo of director D and actor A. What are the other movies having both D and A which were successful?
+		9.What are the top grossing movies after year 2008 in genre G?
+		10.List the directors in order of number of awards won.
+		11.List all the actors according to rate of success of all of their movies.

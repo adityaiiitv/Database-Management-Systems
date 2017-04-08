@@ -1,0 +1,26 @@
+#include <string.h>
+#include<iostream>
+using namespace std;
+
+EXEC SQL BEGIN DECLARE SECTION;
+char title[200],fname[50];
+EXEC SQL END DECLARE SECTION;
+
+int main()
+{
+
+	EXEC SQL CONNECT TO lab@localhost USER postgres ;
+	EXEC SQL set search_path to "MCDB";
+	EXEC SQL DECLARE emp_cur CURSOR FOR select title , fname from
+	(media_clip join (select director.mid,director.id
+	from (director inner join screenplay_writer on director.mid=screenplay_writer.mid) 
+	where director.id=screenplay_writer.id)as a on media_clip.mid=a.mid)as b join cinema_professional on b.id=cinema_professional.id;
+
+ 	EXEC SQL OPEN emp_cur;
+        while ( sqlca.sqlcode == 0 ) 
+	{
+                EXEC SQL FETCH FROM emp_cur INTO :title, :fname;
+                cout << title<<"                          "<<fname << endl;
+        }
+	return 0;
+}

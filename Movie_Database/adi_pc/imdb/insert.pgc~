@@ -1,0 +1,472 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include "sqlca.h"
+
+EXEC SQL INCLUDE sqlca;
+EXEC SQL BEGIN DECLARE SECTION;
+
+
+typedef struct{
+int id;
+varchar	fname[50]; 
+char sex;
+char dob;
+char country[20];
+}cinema_professional;
+
+/*
+create table media_clip(
+	 mid int,
+	 type varchar(20),
+	 title varchar(100),
+         dor date,
+	 imdb_rating float,
+	 duration time,
+	 language varchar(20),
+	 earning float,
+	 no_of_seasons int,
+	 primary key(mid)
+);
+*/
+typedef struct{
+int mid;	
+varchar type[20];
+varchar title[100];
+varchar date[20];
+float imdb_rating;
+varchar time[20];
+varchar language[20];
+float earning;
+int no_of_seasons
+}media_clip;
+
+//
+/*
+create table genre(
+	 mid int ,
+	 genre char(20),
+	 primary key (mid,genre) ,
+	 foreign key (mid) references media_clip(mid)
+);
+*/
+
+typedef struct{
+int mid;
+char genre[20];
+}genre;
+//
+
+/*
+create table director(
+	 id int,
+	 mid int, 
+	 primary key (id,mid),
+	 foreign key (mid) references media_clip(mid),
+         foreign key (id) references cinema_professional(id)
+);
+*/
+
+typedef struct{
+int id;
+int mid;
+}director;
+//
+/*
+create table lead_cast(
+	 id int ,
+	 mid int ,
+	 primary key (id,mid),
+	 foreign key (id) references cinema_professional(id),
+         foreign key (mid) references media_clip(mid)
+);
+*/
+typedef struct{
+int id;
+int mid;
+}lead_cast;
+//
+/*
+create table producer(
+	 id int ,
+	 mid int ,
+         primary key (id,mid),
+	 foreign key (id) references cinema_professional(id),
+	 foreign key (mid) references media_clip(mid)
+);
+*/
+typedef struct{
+int id;
+int mid;
+}producer;
+//
+/*
+create table screenplay_writer(
+	 id int  ,
+	 mid int ,
+	 primary key (id,mid),
+	 foreign key (id) references cinema_professional(id),
+	 foreign key (mid) references media_clip(mid)
+);
+*/
+typedef struct{
+int id;
+int mid;
+}screenplay_writer;
+//
+/*
+create table oscar(
+	 year int primary key,
+	 best_movie_id int references media_clip(mid),
+	 best_actor_id int ,
+	 best_actress_id int ,
+	 best_director_id int ,	 
+	 best_screenplay_writer_id int ,
+	 best_song_title char(100),
+	 FOREIGN KEY (best_actor_id) REFERENCES cinema_professional(id),
+	 FOREIGN KEY (best_actress_id) REFERENCES cinema_professional(id),
+	 FOREIGN KEY (best_director_id) REFERENCES cinema_professional(id),
+	 FOREIGN KEY (best_screenplay_writer_id) REFERENCES cinema_professional(id)	
+);
+*/
+
+typedef struct{
+int year;
+int best_movie_id;
+int best_actor_id;
+int best_actress_id;
+int best_director_id;
+int best_screenplay_writer_id;
+char best_song_title;
+}oscar;
+//
+/*
+create table singer(
+        song_title char(100),
+	id int,    
+	name char(50),  
+	primary key (id),
+        foreign key (id) references cinema_professional(id)
+);
+*/
+
+typedef struct{
+int id;
+char song_title[100];
+char name[50];
+}singer;
+//
+/*
+create table song(
+	song_title char(100),
+	mid int,
+	id int,
+	primary key (song_title,mid),
+	foreign key (id) references singer(id),
+	foreign key (mid) references media_clip(mid)
+);
+*/
+
+typedef struct{
+char song_title[100];
+int mid;
+int id;
+}song;
+
+
+EXEC SQL END DECLARE SECTION;
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void insert_cust()
+{
+
+printf("\n Enter details:\n");
+EXEC SQL BEGIN DECLARE SECTION;
+int custid;
+int cust_clone;
+EXEC SQL END DECLARE SECTION;
+
+printf("Id: ");
+scanf("%d",&custid);
+printf("\nCustomer Name: ");
+scanf("%s",cname.arr);
+cname.len = strlen(cname.arr);
+printf("%s\n",cname.arr);
+getchar();
+printf("\nEmail: ");
+scanf("%s",cemail.arr);
+cemail.len = strlen(cemail.arr);
+
+printf("Address Id: ");
+scanf("%d",&addr_id);
+getchar();
+printf("\nAddress: ");
+scanf("%s",address.arr);
+getchar();
+address.len = strlen(address.arr);
+printf("\nCity: ");
+scanf("%s",city.arr);
+getchar();
+city.len = strlen(city.arr);
+printf("\nState: ");
+scanf("%s",state.arr);
+getchar();
+state.len = strlen(state.arr);
+printf("\nCountry: ");
+scanf("%s",country.arr);
+getchar();
+country.len = strlen(country.arr);
+printf("\nZip Code: ");
+scanf("%s",zip.arr);
+getchar();
+zip.len = strlen(zip.arr);
+
+
+printf("Phone Id: ");
+scanf("%d",&phone_id);
+getchar();
+printf("\nPhone Number : ");
+scanf("%s",phone.arr);
+getchar();
+phone.len = strlen(phone.arr);
+printf("\nFax Number : ");
+scanf("%s",fax.arr);
+getchar();
+fax.len = strlen(fax.arr);
+
+EXEC SQL set transaction read write;
+EXEC SQL insert into Customer values(:custid,:cname,:cemail);
+if (sqlca.sqlcode < 0) {
+printf("\n\nCUSTOMER (%s) DID NOT GET ADDED\n",cname.arr);
+EXEC SQL rollback work;
+EXEC SQL commit;
+return;
+}
+else
+{
+EXEC SQL insert into Address values(:addr_id, :custid, :address, :city, :state, :zip, :country);
+EXEC SQL insert into Phone values(:phone_id, :custid, :phone, :fax);
+printf("\n New Customer Added Succesfully\n");
+EXEC SQL commit;
+return;
+}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void insert_seller()
+{
+
+
+printf("Enter details of the new seller\n");
+EXEC SQL BEGIN DECLARE SECTION;
+int sellerid;
+int seller_clone;
+EXEC SQL END DECLARE SECTION;
+
+printf("Id: ");
+scanf("%d",&sellerid);
+
+
+printf("\nSeller name: ");
+scanf("%s",sname.arr);
+getchar();
+sname.len = strlen(sname.arr);
+printf("\nEnter the ratings of the seller: ");
+scanf("%d",&ratings);
+getchar();
+
+EXEC SQL set transaction read write;
+EXEC SQL insert into Seller values(:sname,:sellerid,:ratings);
+
+if (sqlca.sqlcode < 0) {
+printf("\n\nSELLER (%s) DID NOT GET ADDED\n",sname.arr);
+EXEC SQL rollback work;
+return;
+}
+else 
+printf("\n New Seller Added Succesfully\n");
+EXEC SQL commit;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void insert_product()
+{
+printf("Enter the details of the new product\n");
+EXEC SQL BEGIN DECLARE SECTION;
+int productid;
+EXEC SQL END DECLARE SECTION;
+
+printf("\nProduct ID:  ");
+scanf("%d",&productid);
+getchar();
+printf("\nProduct name: ");
+scanf("%s",pname.arr);
+pname.len=strlen(pname.arr);
+getchar();
+printf("\nBrand Name: ");
+scanf("%s",brand.arr);
+brand.len=strlen(brand.arr);
+getchar();
+printf("\nEnter price: ");
+scanf("%f",&price);
+printf("\nNumber Available: ");
+scanf("%d",&number);
+printf("\nWeight: ");
+scanf("%f",&weight);
+printf("\nDiscount ID (If any): ");
+scanf("%d",&did);
+printf("\nComments (Description): ");
+scanf("%s",desc.arr);
+desc.len=strlen(desc.arr);
+getchar();
+
+
+EXEC SQL set transaction read write;
+EXEC SQL insert into Product values(:productid,:number,:pname,:price,:desc,:brand,:weight,:did);
+
+if (sqlca.sqlcode < 0) {
+printf("\n\nPRODUCT (%s) DID NOT GET ADDED\n",pname.arr);
+EXEC SQL rollback work;
+return;
+}
+else 
+printf("\n New Product Added Succesfully\n");
+EXEC SQL commit;
+} 
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void main_remove()
+{
+int remove_choice;
+printf("Enter the type of entry you want to delete\n");
+printf("1. Customer\n");
+printf("2. Seller\n");
+printf("3. Back to main menu\n");
+printf("4. Exit\n");
+printf("Enter your choice:  ");
+scanf("%d",&remove_choice);
+switch(remove_choice)
+{
+case 1:
+remove_customer();
+break;
+case 2:
+remove_seller();
+break;
+case 3:
+return;
+case 4:
+EXEC SQL COMMIT;
+EXEC SQL DISCONNECT;
+exit(0);
+}
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void main_insert()
+{
+int insert_choice;
+printf("Enter the type of a new Entry\n");
+printf("1. Customer\n");
+printf("2. Product\n");
+printf("3. Seller\n");
+printf("4. Back to main menu\n");
+printf("5. Exit\n");
+printf("Enter your choice:  ");
+scanf("%d",&insert_choice);
+switch(insert_choice)
+{
+case 1:
+insert_cust();
+break;
+case 2:
+insert_product();
+break;
+case 3:
+insert_seller();
+break;
+case 4:
+return;
+case 5:
+EXEC SQL COMMIT;
+EXEC SQL DISCONNECT;
+exit(0);
+}
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+int main()
+{
+	EXEC SQL CONNECT TO lab@localhost USER postgres ;
+	EXEC SQL set search_path to "MCDB";
+	int choice;
+	printf("\n	Enter your choice of table to insert values:  \n");
+	printf("1: oscar\n2: media clip\n3: cinema professional\n4: director\n5: lead cast\n6: producer\n7: screenplay writer\n8: singer\n9: genre\n");
+	scanf("%d",&choice);
+	switch(choice)
+	{
+		case 1:
+		main_insert();
+		break;
+		case 2: 
+		main_remove();	
+		break;
+		case 3:
+		main_print();
+		break;
+		case 4:
+		query_order();
+		break;
+		case 5:
+		query_product();
+		break;
+		case 6:
+		query_user();
+		break;
+		case 7:
+		EXEC SQL COMMIT;
+		EXEC SQL DISCONNECT;
+		exit(0);
+		default:
+		printf("Re-enter your choice");
+		goto X;
+	}
+return 0;
+}
+
+
+
+

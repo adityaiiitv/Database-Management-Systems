@@ -1,0 +1,130 @@
+INSERT INTO movies VALUES('5','Birdman','14-10-2014','8.0','119','english','42025329');
+INSERT INTO genre VALUES('5','drama','comedy');
+INSERT INTO cinema_professional VALUES('5','Alejandro González Iñárritu','male','15-08-1963','Mexico');
+INSERT INTO cinema_professional VALUES('6','Michael Keaton','male','05-09-1951','USA');
+
+INSERT INTO movies VALUES('6','The Theory of Everything','26-11-2014','7.8','123','english','35705501');
+INSERT INTO genre VALUES('6','drama','romance','biography');
+INSERT INTO cinema_professional VALUES('7','James Marsh','male','30-04-1963','UK');
+INSERT INTO cinema_professional VALUES('8','Anthony McCarten','male','17-10-1972','Finland');
+INSERT INTO cinema_professional VALUES('15','Eddie Redmayne','male','06-01-1982','UK');
+
+INSERT INTO movies VALUES('7','Still Alice','20-02-2015','7.5','101','english','16440000');
+INSERT INTO genre VALUES('7','drama',);
+INSERT INTO cinema_professional VALUES('9','Richard Glatzer','male','28-01-1952','USA');
+INSERT INTO cinema_professional VALUES('10','Lisa Genova','female','11-12-1962','Holland');
+INSERT INTO cinema_professional VALUES('16','Julianne Moore','female','03-12-1960','USA');
+
+INSERT INTO movies VALUES('8','Whiplash','20-02-2015','8.6','107','english','12988000');
+INSERT INTO genre VALUES('8','drama','music');
+INSERT INTO cinema_professional VALUES('11','Damien Chazelle','male','19-01-1985','USA');
+INSERT INTO cinema_professional VALUES('12','Miles Teller','male','20-02-1987','USA');
+
+INSERT INTO oscar VALUES('2015','5','15','16','5');
+
+------------------------------------------------------------------------------------------
+2002 	"Lose Yourself" — 8 Mile
+– Music: Eminem, Jeff Bass, and Luis Resto • Lyrics: Eminem
+ 8 Mile (2002)
+R  |  110 min  |  Drama, Music  |  8 November 2002 (USA) 6.9 english 5240354$
+INSERT INTO movies VALUES('1','8 Mile','08-11-2002','6.9','110','english','5240354');
+INSERT INTO genre VALUES('1','drama','music');
+INSERT INTO songs('Lose Yourself','1');
+INSERT INTO singer('Lose Yourself','1','1');
+INSERT INTO cinema_professional VALUES('1','Eminem','male','17-10-1972','USA');
+INSERT INTO cinema_professional VALUES('17','Curtis Hanson','male','24-03-1945','USA');
+INSERT INTO cinema_professional VALUES('18','Scott Silver','male','14-04-1979','Hungary');
+
+2003 	"Into the West" — The Lord of the Rings: The Return of the King
+– Music and Lyrics: Fran Walsh, Howard Shore, and Annie Lennox
+ The Lord of the Rings: The Return of the King (2003)
+PG-13  |  201 min  |  Adventure, Fantasy  |  17 December 2003 (USA) 8.9 english
+377019352$
+INSERT INTO movies VALUES('2','The Lord of the Rings: The Return of the King','17-12-2003','8.9','201','english','377019352');
+INSERT INTO genre VALUES('2','adventure','fantasy');
+INSERT INTO songs('Into the West','2');
+INSERT INTO singer('Into the West','2','2');
+INSERT INTO cinema_professional VALUES('2','Fran Walsh','female','10-01-1959','New Zealand');
+INSERT INTO cinema_professional VALUES('19','Peter Jackson','male','31-10-1961','New Zealand');
+INSERT INTO cinema_professional VALUES('20','Elijah Wood','male','29-01-1981','USA');
+
+2008 	"Jai Ho" — Slumdog Millionaire
+– Music: A. R. Rahman • Lyrics: Gulzar
+ Slumdog Millionaire (2008)
+R  |  120 min  |  Drama, Romance  |  25 December 2008 (USA)  8.0 hindi 141319195$
+INSERT INTO movies VALUES('3','Slumdog Millionaire','25-12-2008','8.0','120','hindi','141319195');
+INSERT INTO genre VALUES('3','drama','romance');
+INSERT INTO songs('Jai Ho','3');
+INSERT INTO singer('Jai Ho','3','3');
+INSERT INTO cinema_professional VALUES('3','A.R. Rahman','male','06-01-1966','India');
+INSERT INTO cinema_professional VALUES('22','Danny Boyle','male','20-10-1956','UK');
+INSERT INTO cinema_professional VALUES('23','Vikas Swarup','male','12-06-1965','India');
+INSERT INTO cinema_professional VALUES('24','Dev Patel','male','23-04-1990','UK');
+
+2012 	"Skyfall" — Skyfall
+– Music and Lyrics: Adele Adkins and Paul Epworth
+ Skyfall (2012)
+PG-13  |  143 min  |  Action, Thriller  |  9 November 2012 (USA) 7.8 english 304360277$
+INSERT INTO movies VALUES('4','Skyfall','09-10-2012','7.8','143','english','304360277');
+INSERT INTO genre VALUES('4','action','thriller');
+INSERT INTO songs('Skyfall','4');
+INSERT INTO singer('Skyfall','4','4');
+INSERT INTO cinema_professional VALUES('4','Adele','female','05-05-1988','UK');
+INSERT INTO cinema_professional VALUES('25','Sam Mendes','male','01-08-1965','UK');
+INSERT INTO cinema_professional VALUES('26','Neal Purvis','male','09-09-1961','Chile');
+INSERT INTO cinema_professional VALUES('27','Daniel Craig','male','03-03-1968','UK');
+
+---------------------------------------------------------
+ The Walking Dead (2010– )
+TV Series  |  TV-14  |  44 min  |  Drama, Horror oct 31 2010
+english season 5
+creator:Frank Darabont male jan 28 1959 france
+actor: andrew lincoln male sept 14 1973 UK 
+8.7
+INSERT INTO tv_series VALUES('201','The Walking Dead','31-10-2010','8.7','English','5');
+INSERT INTO genre VALUES('201','drama','horror');
+INSERT INTO cinema_professional VALUES('501','Frank Darabont','male','29-01-1959','France');
+INSERT INTO cinema_professional VALUES('502','Andrew Lincoln','male','14-09-1973','UK');
+INSERT INTO director VALUES('501','201');
+INSERT INTO actor VALUES('502','201');
+INSERT INTO writer VALUES('501','201');
+
+ Two and a Half Men (2003– )
+TV Series  |  TV-14  |  22 min  |  Comedy  22 sept 2003 7.2
+season 12
+creator chuck lorre oct 18 1952 USA male
+act: ashton kutcher feb 7 1978 USA male
+INSERT INTO tv_series VALUES('202','Two and a Half Men','22-09-2003','7.2','English','12');
+INSERT INTO genre VALUES('202','comedy');
+INSERT INTO cinema_professional VALUES('503','Chuck Lorre','male','19-10-1952','USA');
+INSERT INTO cinema_professional VALUES('504','Ashton Kutcher','male','07-02-1978','USA');
+INSERT INTO director VALUES('503','202');
+INSERT INTO actor VALUES('504','202');
+INSERT INTO writer VALUES('503','202');
+
+Lost (2004–2010)
+TV Series  |  TV-14  |  44 min  |  Adventure, Drama, Fantasy 
+8.5 season 6 sept 22 2004
+creator: J.J. Abrams june 27 1966 USA
+Jorge Garcia april 23 1978 USA
+INSERT INTO tv_series VALUES('203','Lost','06-09-2004','8.5','English','6');
+INSERT INTO genre VALUES('203','adventure','drama','fantasy');
+INSERT INTO cinema_professional VALUES('505','J.J. Abrams','male','27-06-1966','USA');
+INSERT INTO cinema_professional VALUES('506','Jorge Garcia','male','23-04-1978','USA');
+INSERT INTO director VALUES('505','203');
+INSERT INTO actor VALUES('506','203');
+INSERT INTO writer VALUES('505','203');
+
+ Person of Interest (2011– )
+TV Series  |  TV-14  |  43 min  |  Action, Drama, Mystery
+8.5 sept 22 2011
+Jonathan Nolan 1976 UK male
+Jim Caviezel sept 26 1968 USA male
+INSERT INTO tv_series VALUES('204','Person of Interest','26-09-2011','8.5','English','4');
+INSERT INTO genre VALUES('204','action','drama','mystery');
+INSERT INTO cinema_professional VALUES('507','Jonathan Nolan','male','10-11-1976','UK');
+INSERT INTO cinema_professional VALUES('508','JIm Cavaziel','male','26-09-1968','USA');
+INSERT INTO director VALUES('507','204');
+INSERT INTO actor VALUES('508','204');
+INSERT INTO writer VALUES('507','204');
+

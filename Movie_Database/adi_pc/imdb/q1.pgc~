@@ -1,0 +1,32 @@
+#include <string.h>
+#include<iostream>
+using namespace std;
+
+
+EXEC SQL BEGIN DECLARE SECTION;
+char title[100];
+EXEC SQL END DECLARE SECTION;
+
+int main() 
+{
+	char copy[100];
+	EXEC SQL CONNECT TO lab@localhost USER postgres ;
+	EXEC SQL set search_path to "MCDB";
+	EXEC SQL DECLARE emp_cur CURSOR FOR SELECT title FROM media_clip ;
+        EXEC SQL OPEN emp_cur;
+	int count=1;
+        while ( sqlca.sqlcode == 0 )
+	{
+
+                EXEC SQL FETCH FROM emp_cur INTO :title;
+		if(strcmp(title,copy))
+                {
+			cout<<title<<endl;
+			strcpy(copy,title);
+			
+		}
+		
+        }
+	
+	return 0;
+}

@@ -1,0 +1,4 @@
+SELECT DISTINCT acad.student.studentid FROM acad.student,acad.registers WHERE acad.registers.courseno in ('MT101','MT104');
+SELECT DISTINCT e1.studentid FROM acad.registers e1,acad.registers e2 WHERE e1.courseno = 'MT101' AND e2.courseno= 'MT104' AND e1.studentid = e2.studentid;
+SELECT DISTINCT studentid FROM acad.registers WHERE courseno = 'MT101' EXCEPT SELECT DISTINCT studentid FROM acad.registers WHERE courseno = 'MT104';
+SELECT DISTINCT studentid FROM acad.registers WHERE courseno = 'MT104' AND courseno = 'MT101';

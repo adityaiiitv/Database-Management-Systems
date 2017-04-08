@@ -1,0 +1,36 @@
+#include <string.h>
+#include<iostream>
+using namespace std;
+EXEC SQL BEGIN DECLARE SECTION;
+int year1;
+char fname[50], title[100];
+EXEC SQL END DECLARE SECTION;
+
+int main()
+{
+	char copy[100]
+	EXEC SQL CONNECT TO lab@localhost USER postgres ;
+	EXEC SQL set search_path to "MCDB";
+	EXEC SQL DECLARE emp_cur CURSOR FOR select year, fname, title 
+from 
+	(
+		(oscar join lead_cast on oscar.best_actor_id=lead_cast.id) as x
+			inner join  
+		cinema_professional on x.id=cinema_professional.id
+	) as y
+
+	inner join media_clip on y.mid=media_clip.mid
+where year=extract(year from dor);
+ 
+        EXEC SQL OPEN emp_cur;
+        while ( sqlca.sqlcode == 0 ) 
+	{
+		if(strcmp(copy,title))
+		{
+                	EXEC SQL FETCH FROM emp_cur INTO :year1, :fname ,:title;
+                	cout << year1 << fname <<"                         "<< title << endl;
+			strcpy(copy,title);
+		}
+        }
+	return 0;
+}

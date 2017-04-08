@@ -1,0 +1,1 @@
+﻿SELECT DISTINCT studentid FROM acad.registers WHERE courseno = 'MT104' EXCEPT SELECT DISTINCT studentid FROM acad.registers WHERE courseno = 'MT101';

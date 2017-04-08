@@ -1,0 +1,3 @@
+﻿SELECT * FROM acad.student WHERE acad.student.progid = '01' AND acad.student.cpi > 7;
+SELECT DISTINCT acad.Student.Name,acad.Student.StudentID FROM acad.Student,acad.Offers,acad.Registers WHERE acad.Offers.CourseNo = 'MT101' AND acad.Registers.Semester in ('1','3','5','7') AND acad.Registers.StudentID = acad.Student.StudentID;
+SELECT acad.Offers.CourseNo FROM acad.Offers,acad.Instructor WHERE acad.Offers.InstructorID = acad.Instructor.InstructorID AND acad.Instructor.InstructorName = 'P M Jaat' AND AcadYear = '2010' AND Semester in ('2','4','6','8');

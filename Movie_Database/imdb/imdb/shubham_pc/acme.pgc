@@ -1,0 +1,794 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include "sqlca.h"
+
+EXEC SQL INCLUDE sqlca;
+EXEC SQL BEGIN DECLARE SECTION;
+
+typedef struct{
+int cid;
+varchar cname[50];
+varchar cemail[50];
+}customer_record;
+
+typedef struct{
+int addr_id;	
+varchar address[60];
+varchar city[18];
+varchar state[20];
+varchar zip[20];
+varchar country[20];
+}address_record;
+
+
+typedef struct{
+int phone_id;
+varchar phone[20];
+varchar fax[20];
+}phone_record;
+
+
+typedef struct{
+varchar sname[20];
+varchar sname_clone[20];
+int sid,ratings;
+}seller_record;
+
+
+typedef struct{
+int pid,number;
+varchar pname[50];
+varchar pname_clone[50];
+float price;
+varchar desc[40];
+varchar brand[20];
+float weight;
+int did;
+}product_record;
+
+
+typedef struct{
+int ohid,ohstatus,ohcustid,ohaddressid,ohphoneid;
+char orderdate[10];
+char canceldate[10];
+}orderheader_record;
+
+typedef struct{
+int  olstatusid,olorderid,olproductid,olqty,olshipmentid,olsellerid;
+}orderline_record;
+
+typedef struct{
+int shipid,totalcases,frightno;
+char shipdate[10];
+int arrivaldate[10];
+}shipment_record;
+
+typedef struct{
+short ohid_ind,ohstatus_ind,ohcustid_ind,ohaddressid_ind,ohphoneid_ind;
+short orderdate_ind;
+short canceldate_ind;
+}orderheader_record_ind;
+
+
+
+int cid;
+varchar cname[50];
+varchar cemail[50];
+short cid_ind, cname_ind, cemail_ind;
+
+int addr_id;	
+varchar address[60];
+varchar city[18];
+varchar state[20];
+varchar zip[20];
+varchar country[20];
+short addr_id_ind, addr_custid_ind, addr_ind, city_ind, state_ind, zip_ind, country_ind;
+
+int phone_id;
+varchar phone[20];
+varchar fax[20];
+short phone_id_ind, phone_custid_ind, phone_ind, fax_ind;
+varchar email[50];
+
+int cust_id_clone;
+
+
+varchar sname[20];
+varchar sname_clone[20];
+int sid,ratings;
+short sname_ind,sid_ind,ratings_ind;
+
+
+int pid,number;
+varchar pname[50];
+varchar pname_clone[50];
+float price;
+varchar desc[40];
+varchar brand[20];
+float weight;
+int did;
+short pid_ind,number_ind,pname_ind,price_ind,desc_ind,brand_ind,weight_ind,did_ind;
+
+
+int custno;
+int orderno;
+
+
+
+
+EXEC SQL END DECLARE SECTION;
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void insert_cust()
+{
+
+printf("\n Enter details:\n");
+EXEC SQL BEGIN DECLARE SECTION;
+int custid;
+int cust_clone;
+EXEC SQL END DECLARE SECTION;
+
+printf("Id: ");
+scanf("%d",&custid);
+printf("\nCustomer Name: ");
+scanf("%s",cname.arr);
+cname.len = strlen(cname.arr);
+printf("%s\n",cname.arr);
+getchar();
+printf("\nEmail: ");
+scanf("%s",cemail.arr);
+cemail.len = strlen(cemail.arr);
+
+printf("Address Id: ");
+scanf("%d",&addr_id);
+getchar();
+printf("\nAddress: ");
+scanf("%s",address.arr);
+getchar();
+address.len = strlen(address.arr);
+printf("\nCity: ");
+scanf("%s",city.arr);
+getchar();
+city.len = strlen(city.arr);
+printf("\nState: ");
+scanf("%s",state.arr);
+getchar();
+state.len = strlen(state.arr);
+printf("\nCountry: ");
+scanf("%s",country.arr);
+getchar();
+country.len = strlen(country.arr);
+printf("\nZip Code: ");
+scanf("%s",zip.arr);
+getchar();
+zip.len = strlen(zip.arr);
+
+
+printf("Phone Id: ");
+scanf("%d",&phone_id);
+getchar();
+printf("\nPhone Number : ");
+scanf("%s",phone.arr);
+getchar();
+phone.len = strlen(phone.arr);
+printf("\nFax Number : ");
+scanf("%s",fax.arr);
+getchar();
+fax.len = strlen(fax.arr);
+
+EXEC SQL set transaction read write;
+EXEC SQL insert into Customer values(:custid,:cname,:cemail);
+if (sqlca.sqlcode < 0) {
+printf("\n\nCUSTOMER (%s) DID NOT GET ADDED\n",cname.arr);
+EXEC SQL rollback work;
+EXEC SQL commit;
+return;
+}
+else
+{
+EXEC SQL insert into Address values(:addr_id, :custid, :address, :city, :state, :zip, :country);
+EXEC SQL insert into Phone values(:phone_id, :custid, :phone, :fax);
+printf("\n New Customer Added Succesfully\n");
+EXEC SQL commit;
+return;
+}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void insert_seller()
+{
+
+
+printf("Enter details of the new seller\n");
+EXEC SQL BEGIN DECLARE SECTION;
+int sellerid;
+int seller_clone;
+EXEC SQL END DECLARE SECTION;
+
+printf("Id: ");
+scanf("%d",&sellerid);
+
+
+printf("\nSeller name: ");
+scanf("%s",sname.arr);
+getchar();
+sname.len = strlen(sname.arr);
+printf("\nEnter the ratings of the seller: ");
+scanf("%d",&ratings);
+getchar();
+
+EXEC SQL set transaction read write;
+EXEC SQL insert into Seller values(:sname,:sellerid,:ratings);
+
+if (sqlca.sqlcode < 0) {
+printf("\n\nSELLER (%s) DID NOT GET ADDED\n",sname.arr);
+EXEC SQL rollback work;
+return;
+}
+else 
+printf("\n New Seller Added Succesfully\n");
+EXEC SQL commit;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void insert_product()
+{
+printf("Enter the details of the new product\n");
+EXEC SQL BEGIN DECLARE SECTION;
+int productid;
+EXEC SQL END DECLARE SECTION;
+
+printf("\nProduct ID:  ");
+scanf("%d",&productid);
+getchar();
+printf("\nProduct name: ");
+scanf("%s",pname.arr);
+pname.len=strlen(pname.arr);
+getchar();
+printf("\nBrand Name: ");
+scanf("%s",brand.arr);
+brand.len=strlen(brand.arr);
+getchar();
+printf("\nEnter price: ");
+scanf("%f",&price);
+printf("\nNumber Available: ");
+scanf("%d",&number);
+printf("\nWeight: ");
+scanf("%f",&weight);
+printf("\nDiscount ID (If any): ");
+scanf("%d",&did);
+printf("\nComments (Description): ");
+scanf("%s",desc.arr);
+desc.len=strlen(desc.arr);
+getchar();
+
+
+EXEC SQL set transaction read write;
+EXEC SQL insert into Product values(:productid,:number,:pname,:price,:desc,:brand,:weight,:did);
+
+if (sqlca.sqlcode < 0) {
+printf("\n\nPRODUCT (%s) DID NOT GET ADDED\n",pname.arr);
+EXEC SQL rollback work;
+return;
+}
+else 
+printf("\n New Product Added Succesfully\n");
+EXEC SQL commit;
+} 
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void remove_customer() {
+EXEC SQL begin declare section;
+customer_record crec;
+address_record arec;
+phone_record prec;
+int cnum,onum;
+EXEC SQL end declare section;
+
+printf("Enter Customer Number to be deleted: ");
+scanf("%d",&cnum);
+getchar();
+
+EXEC SQL select *
+into :crec
+from Customer
+where CustID = :cnum;
+
+if (sqlca.sqlcode > 0) {
+printf("Customer (%d) does not exist\n",cnum);
+return;
+}
+
+EXEC SQL declare del_cur cursor for
+select ID from OrderHeader where CustID = :cnum and statusID = 1 or statusID = 2 or statusID = 4;
+EXEC SQL set transaction read only;
+EXEC SQL open del_cur;
+EXEC SQL fetch del_cur into :onum;
+if (sqlca.sqlcode == 0) {
+printf("Customers has pending orders - cannot delete - Cancel the orders first to proceed\n");
+EXEC SQL commit;
+return;
+}
+EXEC SQL commit;
+char choice;
+printf("\nCustomer No.: %d",cnum);
+printf("\nName: %s",crec.cname.arr);
+printf("\nE-Mail: %s",crec.cemail.arr);
+printf("\nYou sure you want to delete this customer (Y/N): ");
+scanf("%c",&choice);
+if(choice=='Y' ||choice=='y')
+{
+EXEC SQL set transaction read write;
+EXEC SQL delete from Customer where CustID = :cnum;
+	EXEC SQL DECLARE deleteA CURSOR FOR
+            SELECT * FROM Address WHERE CustID = :cnum;
+ 
+   EXEC SQL OPEN deleteA;
+ 
+   do {
+      EXEC SQL FETCH deleteA INTO :arec;
+      if (sqlca.sqlcode != 0) break;
+      printf( "\nDeleting all the records of the Seller...\n");
+      EXEC SQL DELETE FROM Address WHERE CURRENT OF deleteA;
+      } while ( 1 );
+ 
+   EXEC SQL CLOSE deleteA;
+
+EXEC SQL DECLARE deleteP CURSOR FOR
+            SELECT * FROM Phone WHERE CustID = :cnum;
+ 
+   EXEC SQL OPEN deleteP;
+ 
+   do {
+      EXEC SQL FETCH deleteP INTO :prec;
+      if (sqlca.sqlcode != 0) break;
+      printf( "\nDeleting all the records of the Customer...\n");
+      EXEC SQL DELETE FROM Phone WHERE CURRENT OF deleteP;
+      } while ( 1 );
+ 
+   EXEC SQL CLOSE deleteP;
+
+printf("\nCustomer (%d) DELETED\n",cnum);
+EXEC SQL commit;
+return;
+}
+
+else
+{
+EXEC SQL commit;
+printf("Cancellation Procedure Aborted\n");
+return;
+}
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void remove_seller()
+{
+EXEC SQL begin declare section;
+seller_record srec;
+int snum,onum;
+int sid_clone,pid_clone;
+EXEC SQL end declare section;
+printf("\nSeller Number to be deleted: ");
+scanf("%d",&snum); getchar();
+EXEC SQL select *
+into :srec
+from Seller
+where ID = :snum;
+if (sqlca.sqlcode > 0) {
+printf("\nSeller (%d) does not exist\n",snum);
+return;
+}
+EXEC SQL declare del_cur1 cursor for
+select OrderHeaderID from OrderLine where sellerid = :snum and statusID = 1 or statusID = 2 or statusID = 4;
+EXEC SQL set transaction read only;
+EXEC SQL open del_cur1;
+EXEC SQL fetch del_cur1 into :onum;
+if (sqlca.sqlcode == 0) {
+printf("Seller  has pending orders - Cannot delete the seller\n");
+EXEC SQL commit;
+return;
+}
+EXEC SQL commit;
+EXEC SQL set transaction read write;
+EXEC SQL delete from Seller where ID = :snum;
+EXEC SQL DECLARE deleteS CURSOR FOR
+            SELECT * FROM sellsProduct WHERE sellerid = :snum;
+ 
+   EXEC SQL OPEN deleteS;
+ 
+   do {
+      EXEC SQL FETCH deleteS INTO :sid_clone, :pid_clone;
+      if (sqlca.sqlcode != 0) break;
+      printf( "\nDeleting all the records of the Seller...\n");
+      EXEC SQL DELETE FROM sellsProduct WHERE CURRENT OF deleteS;
+      } while ( 1 );
+ 
+   EXEC SQL CLOSE deleteS;
+printf("\nSeller (%d) DELETED\n",snum);
+EXEC SQL commit;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void print_invoice(int orderno)
+{
+
+EXEC SQL BEGIN DECLARE SECTION;
+orderheader_record ohrec;
+orderheader_record_ind ohrec_ind;
+orderline_record olrec;
+shipment_record shiprec;
+varchar sstatus[30];
+product_record productrec;
+
+int disc;
+EXEC SQL END DECLARE SECTION; 
+
+EXEC SQL SELECT * INTO :ohrec FROM OrderHeader WHERE ID = :orderno;
+ 
+   
+EXEC SQL DECLARE showOL CURSOR FOR
+            SELECT * FROM OrderLine WHERE OrderHeaderID = :orderno;
+
+printf("\t\t\tOrder Management Systems\n");
+printf("-------------------------------------------------------------------------------------------------------------------\n");
+printf("\nInvoice No: %d",orderno);
+EXEC SQL set transaction read only;
+EXEC SQL select * INTO :ohrec indicator :ohrec_ind from OrderHeader where ID = :orderno; 
+if (sqlca.sqlcode == 0) {
+EXEC SQL select Name,Email into :cname,:cemail from Customer where CustID = :ohrec.ohcustid;
+EXEC SQL select Address,City,State,Zip,Country into :address,:city,:state,:zip,:country from Address where CustID = :ohrec.ohcustid and ID = 2;  
+EXEC SQL select PhoneNo into :phone from Phone where CustID = :ohrec.ohcustid and ID = 2;
+cname.arr[cname.len] = '\0';
+cemail.arr[cemail.len]='\0';
+address.arr[address.len]='\0';
+city.arr[city.len]='\0';
+state.arr[state.len]='\0';
+zip.arr[zip.len]='\0';
+country.arr[country.len] = '\0';
+phone.arr[phone.len] = '\0';
+printf("\nName and Address: \n");
+printf("%s\n\t%s,\n%s, %s,\t%s - %s\n\t%s",cname.arr,address.arr,city.arr,state.arr,country.arr,zip.arr,phone.arr);
+printf("\nOrder date:  %s",ohrec.orderdate);
+EXEC SQL select Description into :sstatus from Status where ID = :ohrec.ohstatus;
+printf("\nStatus:  %s",sstatus.arr);
+printf("\nCancel Date:  %s",ohrec.canceldate);
+
+
+printf("\n\n\t\tProduct Description\n");
+EXEC SQL open showOL;
+EXEC SQL fetch showOL into :olrec;
+printf("Product Id.\tProduct Name\tQuantity\tPrice\tTotal Price\n");
+printf("-----------------------------------------------------------\n");
+double sum = 0.0;
+double total;
+int disc;
+while (sqlca.sqlcode == 0)
+{
+EXEC SQL select *  into :productrec from Product where ProductID = :olrec.olproductid;
+EXEC SQL select PCT into :disc from Discount where ID = :productrec.did;
+total= olrec.olqty * ( productrec.price -  ( (productrec.price*disc) /100 ) );
+printf("    %d\t\t%s\t\t%d\t\t%f\t\t%f",olrec.olproductid,productrec.pname.arr,olrec.olqty,productrec.price,total);
+sum+=total;
+EXEC SQL fetch showOL into :olrec;
+}
+
+EXEC SQL close showOL;
+printf("------------------------------------");
+printf("-------------------------\n");
+printf("				\n");
+printf("TOTAL: %10.2f\n",sum);
+printf("************************************");
+printf("**************************\n");
+EXEC SQL commit;
+return;
+}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void print_customer(int custno)
+{
+EXEC SQL BEGIN DECLARE SECTION;
+orderheader_record ohrec;
+EXEC SQL END DECLARE SECTION;
+
+EXEC SQL DECLARE showOH CURSOR FOR SELECT * FROM OrderHeader WHERE CustID = :custno;
+EXEC SQL OPEN showOH;
+EXEC SQL FETCH showOH INTO :ohrec;
+while(sqlca.sqlcode==0)
+{
+print_invoice(ohrec.ohid);
+printf("\n\n\n");
+EXEC SQL FETCH showOH INTO :ohrec;
+}
+EXEC SQL COMMIT;
+return;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void query_order()
+{
+EXEC SQL BEGIN DECLARE SECTION;
+char date[10];
+orderheader_record ohrec;
+EXEC SQL END DECLARE SECTION;
+printf("\n\n");
+printf("Enter the date upto which you want to print orders: ");
+scanf("%s",date);
+
+EXEC SQL DECLARE queryorder CURSOR FOR select CustID, OrderHeader.ID, OrderDate from OrderHeader where OrderDate < date;
+EXEC SQL OPEN queryorder;
+EXEC SQL FETCH queryorder into :ohrec;
+printf("\n\nCustomer ID\tInvoice No.\tOrder Date\n");
+while(sqlca.sqlcode==0)
+{
+printf("%d\t%d\t%s\n",ohrec.ohcustid,ohrec.ohid,ohrec.orderdate);
+EXEC SQL FETCH showOH INTO :ohrec;
+}
+EXEC SQL CLOSE queryorder;
+EXEC SQL COMMIT;
+return;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void query_product()
+{
+EXEC SQL BEGIN DECLARE SECTION;
+int pid,total;
+varchar name[50];
+varchar state[20];
+EXEC SQL END DECLARE SECTION;
+printf("\nEnter the State for which you want the most sold product:  \n");
+scanf("%s",state.arr);
+state.len=strlen(state.arr);
+
+EXEC  SQL select productid,total,name into :pid,:total,:name from orderheader, address,
+(select orderline.productid,sum(orderquantitiy) as total ,
+name,orderheaderid
+from orderline , product
+where orderline.productid = product.productid
+group by orderline.productid, product.name,orderheaderid) as r1
+where orderheader.id = r1.orderheaderid and
+address.custid = orderheader.custid and state = :state
+order by total desc limit 1;
+
+printf("\nMost sold Product is :\nProduct Id: %d: \n Product Name: %s\nUnits Sold: %d\n\n",pid,name.arr,total);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void query_user()
+{
+EXEC SQL BEGIN DECLARE SECTION;
+int total;
+int id;
+varchar name1[50];
+EXEC SQL END DECLARE SECTION;
+
+EXEC SQL select count(orderheader.custid), orderheader.custid ,name into :total,:id,:name1 from orderheader , customer where customer.custid = orderheader.custid group by orderheader.custid ,name order by no_of_orders desc limit 1;
+printf("User with most Orders is :  \nID: %d\nName: %sNo. of Orders: %d\n",id,name1.arr,total);
+
+EXEC SQL select count(orderheader.custid), orderheader.custid , customer.name into :total,:id,:name1 from orderheader , customer where customer.custid = orderheader.custid and canceldate is not null group by orderheader.custid , name order by no_of_orders desc limit 1;
+printf("User with most Cancelled Orders is :  \nID: %d\nName: %sNo. of Orders: %d\n",id,name1.arr,total);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void main_print()
+{
+int print_choice;
+X:
+printf("\nInvoice printing Menu\n");
+printf("1. Print all the orders by a particular customer\n");
+printf("2. Print a particular Invoice\n");
+printf("3. Return Back\n");
+printf("Enter your choice: ");
+scanf("%d",&print_choice);
+switch(print_choice)
+{
+case 1:
+printf("\nEnter the customer number for whom you want to see the records: ");
+scanf("%d",&custno);
+//print_customer(custno);
+break;
+
+case 2:
+printf("\nEnter the Invoice Number: ");
+scanf("%d",&orderno);
+print_invoice(orderno);
+break;
+
+case 3:
+break;
+
+default:
+printf("Invalid Input\nEnter again\n");
+goto X;
+}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void main_remove()
+{
+int remove_choice;
+printf("Enter the type of entry you want to delete\n");
+printf("1. Customer\n");
+printf("2. Seller\n");
+printf("3. Back to main menu\n");
+printf("4. Exit\n");
+printf("Enter your choice:  ");
+scanf("%d",&remove_choice);
+switch(remove_choice)
+{
+case 1:
+remove_customer();
+break;
+case 2:
+remove_seller();
+break;
+case 3:
+return;
+case 4:
+EXEC SQL COMMIT;
+EXEC SQL DISCONNECT;
+exit(0);
+}
+}
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void main_insert()
+{
+int insert_choice;
+printf("Enter the type of a new Entry\n");
+printf("1. Customer\n");
+printf("2. Product\n");
+printf("3. Seller\n");
+printf("4. Back to main menu\n");
+printf("5. Exit\n");
+printf("Enter your choice:  ");
+scanf("%d",&insert_choice);
+switch(insert_choice)
+{
+case 1:
+insert_cust();
+break;
+case 2:
+insert_product();
+break;
+case 3:
+insert_seller();
+break;
+case 4:
+return;
+case 5:
+EXEC SQL COMMIT;
+EXEC SQL DISCONNECT;
+exit(0);
+}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void main_menu()
+{
+printf("\n\n");
+printf("*********************************************************\n");
+printf("E-Commerce Database Management System\n");
+printf("Please select an option:\n");
+printf("<1> Insert a new Entry\n");
+printf("<2> Remove an existing Entry\n");
+printf("<3> Print invoice for a given order\n");
+printf("<4> All orders before a particular date\n");
+printf("<5> Most sold product in a state\n");
+printf("<6> Users with Maximum order and with maximum cancelled orders\n");
+printf("<7> Exit\n");
+printf("*********************************************************\n");
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+int main()
+{
+EXEC SQL CONNECT TO project@localhost:5432 USER postgres;
+EXEC SQL set search_path to orderms;
+
+int main_choice;
+X:
+main_menu();
+printf("\nEnter your choice (eg. 1 for 1st choice):  ");
+scanf("%d",&main_choice);
+switch(main_choice)
+{
+case 1:
+main_insert();
+break;
+case 2: 
+main_remove();
+break;
+case 3:
+main_print();
+break;
+case 4:
+query_order();
+break;
+case 5:
+query_product();
+break;
+case 6:
+query_user();
+break;
+case 7:
+EXEC SQL COMMIT;
+EXEC SQL DISCONNECT;
+exit(0);
+default:
+printf("Re-enter your choice");
+goto X;
+}
+EXEC SQL DISCONNECT project;
+return 0;
+}
+
+
+
+
